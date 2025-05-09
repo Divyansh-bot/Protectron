@@ -1,0 +1,1 @@
+timestamp,process_id,parent_process,child_process,source_ip,destination_ip,destination_port,protocol,bytes_sent,bytes_received,duration,command_executed,is_malicious

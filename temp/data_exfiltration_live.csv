@@ -1,0 +1,1 @@
+bytes_sent,bytes_received,duration,port,destination_type_external,destination_type_internal,file_type_csv,file_type_docx,file_type_exe,file_type_pdf,file_type_xlsx,file_type_zip,direction_download,direction_upload

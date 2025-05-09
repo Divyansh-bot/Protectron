@@ -1,0 +1,13 @@
+pymongo
+flask  # If you're including a web dashboard
+joblib
+scikit-learn
+psutil
+watchdog
+pandas
+numpy
+datetime
+scapy
+win10toast
+pystray
+Pillow

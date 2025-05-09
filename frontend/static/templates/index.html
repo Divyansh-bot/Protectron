@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protectron Dashboard</title>
+    
+    <!-- ✅ Include Bootstrap for a Modern Look -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .log-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 5px;
+            padding: 10px;
+            background: #222;
+        }
+        .log-item {
+            padding: 5px;
+            border-bottom: 1px solid #444;
+        }
+        .log-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+
+    <script>
+        var socket = io();
+
+        // ✅ Live logs update
+        socket.on("update", function(log) {
+            let logEntry = document.createElement("div");
+            logEntry.className = "log-item text-danger";
+            logEntry.innerText = `🚨 [${log.timestamp}] ${log.source_ip} → ${log.destination_ip} | Threat: ${log.threat}`;
+            document.getElementById("live-logs").prepend(logEntry);
+        });
+
+        // ✅ Fetch logs periodically
+        function fetchLogs(endpoint, elementId) {
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = "";
+                    data.forEach(log => {
+                        let logEntry = document.createElement("div");
+                        logEntry.className = "log-item text-warning";
+                        logEntry.innerText = `📌 [${log.timestamp}] ${JSON.stringify(log)}`;
+                        document.getElementById(elementId).appendChild(logEntry);
+                    });
+                });
+        }
+
+        setInterval(() => {
+            fetchLogs("/logs/network", "network-logs");
+            fetchLogs("/logs/file_access", "file-logs");
+            fetchLogs("/logs/user_behavior", "user-logs");
+        }, 5000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center text-info">Protectron Security Dashboard</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <h3 class="text-danger">📡 Live Network Threats</h3>
+                    <div class="log-container" id="live-logs"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <h3 class="text-warning">🔥 Recent Network Logs</h3>
+                    <div class="log-container" id="network-logs"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <h3 class="text-success">🔍 Recent File Access Logs</h3>
+                    <div class="log-container" id="file-logs"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <h3 class="text-primary">⚠️ User Behavior Anomalies</h3>
+                    <div class="log-container" id="user-logs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Bootstrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

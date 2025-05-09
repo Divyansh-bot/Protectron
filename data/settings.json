@@ -1,0 +1,12 @@
+{
+    "Network Security": true,
+    "User Behavior": true,
+    "File Access": true,
+    "Reverse Shell": true,
+    "Data Exfiltration": true,
+    "App Permissions": true,
+    "System Calls": true,
+    "File Integrity": true,
+    "USB Monitor": true
+  }
+  
